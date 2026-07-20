@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TonPures</title>
+    <style>
+        body { background: #0b0b0e radial-gradient(circle at 50% 50%, rgba(157,78,221,0.12) 0%, transparent 50%); color: #fff; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .container { width: 100%; max-width: 440px; background: #13131a; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 35px 30px; box-sizing: border-box; text-align: center; }
+        .brand-logo { text-align: left; font-size: 26px; font-weight: 800; margin-bottom: 5px; }
+        .subtitle { text-align: left; color: #666; font-size: 14px; margin-bottom: 30px; }
+        .toggle-wrapper { display: grid; grid-template-columns: 1fr 1fr 1fr; background: #17171c; border-radius: 30px; padding: 4px; margin-bottom: 30px; }
+        .toggle-item { padding: 12px 0; font-size: 14px; font-weight: 600; color: #888; cursor: pointer; border-radius: 25px; transition: 0.2s; }
+        .toggle-item.active { background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.05); }
+        .input-group { text-align: left; margin-bottom: 25px; }
+        label { display: block; font-size: 13px; color: #888; margin-bottom: 10px; font-weight: 500; }
+        input, select { width: 100%; background: #181922; border: 1px solid #23273a; border-radius: 14px; color: #fff; font-size: 16px; box-sizing: border-box; outline: none; padding: 18px 16px; transition: 0.15s; }
+        .stars-field { padding: 18px 16px; -moz-appearance: textfield; } 
+        .stars-field::-webkit-outer-spin-button, .stars-field::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .error-border { border-color: #ff453a !important; box-shadow: 0 0 10px rgba(255, 69, 58, 0.2); }
+        .error-text { color: #ff453a; font-size: 12px; margin-top: 8px; display: none; font-weight: 500; }
+        select { padding: 18px 40px 18px 16px; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='%23888'%3e%3cpath d='M12 15l-5-5h10z'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 16px center; background-size: 18px; cursor: pointer; }
+        select option { background-color: #181922; color: #fff; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .total-box { background: #17171c; border-radius: 14px; padding: 20px; margin: 30px 0; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .total-price { color: #9d4edd; font-size: 24px; font-weight: 700; }
+        .btn-pay { width: 100%; background: linear-gradient(135deg, #9d4edd, #7b2cbf); color: #fff; border: none; border-radius: 14px; padding: 18px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-pay.disabled { background: #2c2c2e; color: #666; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="brand-logo">TonPures</div>
+    <div class="subtitle">Пополнение Telegram БЕЗ VPN</div>
+    <div class="toggle-wrapper">
+        <div class="toggle-item active" id="btn_stars" onclick="setTab('stars')">Stars</div>
+        <div class="toggle-item" id="btn_prem" onclick="setTab('premium')">Premium</div>
+        <div class="toggle-item" id="btn_proxy" onclick="setTab('proxy')">Proxy</div>
+    </div>
+    <div class="input-group">
+        <label>Ваш Telegram username (без @)</label>
+        <input type="text" id="username_field" placeholder="username" oninput="calculate()">
+        <div class="error-text" id="username_error_msg">Неверный формат! Только английские буквы, цифры и _. Минимум 4 символа.</div>
+    </div>
+    <div id="box_stars" class="tab-content active">
+        <div class="input-group">
+            <label>Количество звёзд (от 50 до 20000)</label>
+            <input type="number" id="stars_input" class="stars-field" value="100" oninput="calculate()">
+            <div class="error-text" id="stars_error_msg">Можно указать звёзд от 50 до 20 000!</div>
+        </div>
+    </div>
+    <div id="box_prem" class="tab-content">
+        <div class="input-group">
+            <label>Период подписки Telegram Premium</label>
+            <select id="premium_select" onchange="calculate()">
+                <option value="1290">⭐ 3 месяца — 1290 ₽</option>
+                <option value="1690">⭐ 6 месяцев — 1690 ₽</option>
+                <option value="2990" selected>⭐ 1 год — 2990 ₽</option>
+            </select>
+        </div>
+    </div>
+    <div id="box_proxy" class="tab-content">
+        <div class="input-group">
+            <label>Скоростной прокси Нидерланды (Telegram Only)</label>
+            <select id="proxy_select" onchange="calculate()">
+                <option value="50">🌐 1 неделя — 50 ₽</option>
+                <option value="90">🌐 2 недели — 90 ₽</option>
+                <option value="190">🌐 1 месяц — 190 ₽</option>
+                <option value="350">🌐 2 месяца — 350 ₽</option>
+                <option value="490" selected>🌐 3 месяца — 490 ₽</option>
+            </select>
+        </div>
+    </div>
+    <div class="total-box"><span>Сумма к оплате:</span><span class="total-price" id="total_val">175 ₽</span></div>
+    <button class="btn-pay" id="pay_button" onclick="pay()">Оплатить через СБП</button>
+</div>
+<script>
+    let activeTab = 'stars'; let isStarsValid = true; let isUsernameValid = false;
+    function setTab(tab) {
+        activeTab = tab;
+        document.getElementById('btn_stars').classList.toggle('active', tab === 'stars');
+        document.getElementById('btn_prem').classList.toggle('active', tab === 'premium');
+        document.getElementById('btn_proxy').classList.toggle('active', tab === 'proxy');
+        document.getElementById('box_stars').classList.toggle('active', tab === 'stars');
+        document.getElementById('box_prem').classList.toggle('active', tab === 'premium');
+        document.getElementById('box_proxy').classList.toggle('active', tab === 'proxy');
+        calculate();
+    }
+    function calculate() {
+        let price = 0; const usernameField = document.getElementById('username_field'); const usernameError = document.getElementById('username_error_msg'); const starsField = document.getElementById('stars_input'); const starsError = document.getElementById('stars_error_msg'); const payButton = document.getElementById('pay_button');
+        
+        let rawUser = usernameField.value.trim().replace('@', '');
+        usernameField.value = rawUser; 
+        
+        // Жесткий фильтр Телеграма (только английские буквы, цифры и _, от 4 до 32 знаков)
+        const tgRegex = /^[a-zA-Z0-9_]{4,32}$/;
+        
+        if (rawUser === "") { usernameField.classList.remove('error-border'); usernameError.style.display = 'none'; isUsernameValid = false; }
+        else if (!tgRegex.test(rawUser)) { usernameField.classList.add('error-border'); usernameError.style.display = 'block'; isUsernameValid = false; }
+        else { usernameField.classList.remove('error-border'); usernameError.style.display = 'none'; isUsernameValid = true; }
+        
+        if (activeTab === 'stars') {
+            let count = parseInt(starsField.value) || 0; if (count > 20000) { count = 20000; starsField.value = 20000; }
+            if (count < 50) { starsField.classList.add('error-border'); starsError.style.display = 'block'; isStarsValid = false; }
+            else { starsField.classList.remove('error-border'); starsError.style.display = 'none'; isStarsValid = true; price = Math.round(count * 1.75); }
+        } else if (activeTab === 'premium') { price = parseInt(document.getElementById('premium_select').value) || 0; isStarsValid = true; }
+        else if (activeTab === 'proxy') { price = parseInt(document.getElementById('proxy_select').value) || 0; isStarsValid = true; }
+        
+        if (!isUsernameValid) { document.getElementById('total_val').innerText = '0 ₽'; payButton.innerText = "Укажите верный username!"; payButton.classList.add('disabled'); }
+        else if (!isStarsValid) { document.getElementById('total_val').innerText = '0 ₽'; payButton.innerText = "Исправьте количество звёзд!"; payButton.classList.add('disabled'); }
+        else { document.getElementById('total_val').innerText = price + ' ₽'; payButton.innerText = "Оплатить через СБП"; payButton.classList.remove('disabled'); }
+    }
+    function pay() { if (!isUsernameValid || !isStarsValid) return; alert('Заказ успешно оформлен! Ожидайте автоматического зачисления от 2 до 5 минут.'); }
+</script>
+</body>
+</html>
