@@ -8,9 +8,9 @@ orders = {}
 def get_start_markup():
     m = KM(row_width=2)
     b1 = KB("🛍️ Купить Звёзды или Premium", callback_data="buy")
-    b2 = KB("🚀 Приложение", web_app=telebot.types.WebAppInfo(url="https://github.io"))
+    b2 = KB("🚀 Приложение", web_app=telebot.types.WebAppInfo(url="https://67pokoyo-ui.github.io/fgssrdgrdgdsgfdsgrgdsfgv/"))
     b3 = KB("🧾 Мои чеки", callback_data="c_cl")
-    b4 = KB("👥 Поддержка", url="https://t.me")
+    b4 = KB("👥 Поддержка", url="https://t.me/TonPuresSupportBot")
     b5 = KB("🇬🇧 English", callback_data="l_cl")
     return m.add(b1).row(b2, b3).row(b4, b5)
 
